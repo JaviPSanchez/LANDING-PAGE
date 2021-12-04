@@ -9,10 +9,10 @@
   font-size: 1.6rem;
   font-weight: $Default-font-wheigt;
   border: 1px solid $color-black;
-  border-radius: 5px;
+  border-radius: $Default-border-radious;
   &:hover {
-    background-color: $color-white;
-    color: $color-black;
+    background-color: $color-black;
+    color: $color-white;
     border-radius: $Default-border-radious;
   }
 }

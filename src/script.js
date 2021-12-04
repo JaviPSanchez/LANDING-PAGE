@@ -4,19 +4,106 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 import gsap from "gsap";
 
-////////////////CARDS/////////////////
+const vertexShader = `
+varying vec2 vUv;
+void main()	{
+  vUv = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+}
+`;
+const fragmentShader = `
+//#extension GL_OES_standard_derivatives : enable
 
-var scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0xffffff, 0.13);
+varying vec2 vUv;
+uniform float thickness;
 
-var camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  15
+float edgeFactor(vec2 p){
+  vec2 grid = abs(fract(p - 0.5) - 0.5) / fwidth(p) / thickness;
+  return min(grid.x, grid.y);
+}
+void main() {
+  float a = edgeFactor(vUv);
+  vec3 c = mix(vec3(1), vec3(0), a);
+  gl_FragColor = vec4(c, 1.0);
+}
+`;
+
+///////DEBUG/////
+
+const gui = new dat.GUI();
+
+///////CANVAS//////
+
+const canvas = document.querySelector("canvas.webgl");
+
+///////SCENE//////
+
+const scene = new THREE.Scene();
+// scene.background = new THREE.Color(0x00000);
+scene.fog = new THREE.FogExp2(0xffffff, 0.1);
+
+///////////CAMERA//////////
+
+const fieldOfView = 75;
+const WIDTH = window.innerWidth;
+const HEIGHT = window.innerHeight;
+let aspectRatio = WIDTH / HEIGHT;
+const nearClippingPlane = 0.1;
+const farClippingPlane = 1000;
+
+const camera = new THREE.PerspectiveCamera(
+  fieldOfView,
+  aspectRatio,
+  nearClippingPlane,
+  farClippingPlane
 );
+camera.position.set(0, 0, 50);
 
-var renderer = new THREE.WebGLRenderer({
+////////////OBJECTS//////////////
+
+////FLOOR
+
+const floorGeometry = new THREE.BoxGeometry(20, 0.1, 20);
+const floorMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+scene.add(floor);
+
+////BUILDINGS
+
+const cube = [];
+for (let i = 0; i < 1000; ++i) {
+  const rHeight = Math.random() * 6;
+  const geometry = new THREE.BoxGeometry(0.3, rHeight, 0.3);
+  // const cubeMaterial = new THREE.MeshLambertMaterial({
+  //   color: 0xffffff,
+  //   transparent: true,
+  //   opacity: 0.5,
+  // });
+  const cubeMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      thickness: {
+        value: 1.5,
+      },
+    },
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+  });
+  cube[i] = new THREE.Mesh(geometry, cubeMaterial);
+  floor.add(cube[i]);
+
+  const x = (Math.random() * (10.0 - -10) + -10).toFixed(2);
+  const y = 0;
+  const z = (Math.random() * (10.0 - -10) + -10).toFixed(2);
+  cube[i].position.set(x, y, z);
+}
+
+///////////ORBIT//////////
+
+new OrbitControls(camera, canvas);
+
+///////////RENDER//////////
+
+const renderer = new THREE.WebGLRenderer({
   antialias: true,
 });
 
@@ -24,44 +111,19 @@ renderer.setClearColor(0xffffff);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("body").append(renderer.domElement);
 
-// window.onresize = function () {
-//   onWindowResize;
-// };
-
-function onWindowResize() {
+window.addEventListener("resize", onResize);
+function onResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-//Floor
-var floorG = new THREE.BoxGeometry(20, 0.1, 20);
-// var floorM = new THREE.MeshLambertMaterial({ color: 0x204555 });
-var floorM = new THREE.MeshLambertMaterial({ color: 0x000000 });
-var floor = new THREE.Mesh(floorG, floorM);
-scene.add(floor);
+////////CAMERA///////
 
-//Buildings
-var cube = [];
-for (var i = 0; i < 1000; ++i) {
-  var rHeight = Math.random() * 8 + 0.25;
-  var geometry = new THREE.BoxGeometry(0.25, rHeight, 0.25);
-  var material = new THREE.MeshLambertMaterial({ color: 0x000000 });
-  material.transparent = true;
-  material.opacity = 0.5;
-  cube[i] = new THREE.Mesh(geometry, material);
-  floor.add(cube[i]);
-
-  var x = (Math.random() * (10.0 - -10) + -10).toFixed(2);
-  var y = 0;
-  var z = (Math.random() * (10.0 - -10) + -10).toFixed(2);
-  cube[i].position.set(x, y, z);
-}
-
-//camera
 camera.position.set(0, 3, 10);
 
-//lights
+////////LIGHTS///////
+
 var light1 = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(light1);
 light1.position.set(1.5, 2, 1);
@@ -80,8 +142,8 @@ function render() {
   renderer.render(scene, camera);
 
   //move camera and city to mouse movement slowly
-  var xDistance = floorRotation - floor.rotation.y;
-  var yDistance = cameraPosition - camera.position.z;
+  const xDistance = floorRotation - floor.rotation.y;
+  const yDistance = cameraPosition - camera.position.z;
   distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
   if (distance > 0) {
     floor.rotation.y += xDistance * easingAmount;
@@ -90,7 +152,7 @@ function render() {
 }
 render();
 
-//Animaciones con GSAP
+//////////GSAP//////////
 
 gsap.to("#JaviPS", {
   opacity: 1,
@@ -130,20 +192,4 @@ document.querySelector("#viewWorkBtn").addEventListener("click", (e) => {
       window.location.assign("https://javipsanchez.netlify.app/");
     },
   });
-  /*
-  gsap.to(camera.rotation, {
-    x: Math.PI / 2,
-    ease: "power3.inOut",
-    duration: 2,
-  });
-  gsap.to(camera.position, {
-    y: 1000,
-    ease: "power3.in",
-    duration: 1,
-    delay: 2,
-    onComplete: () => {
-      window.location.assign("https://javipsanchez.netlify.app/");
-    },
-  });
-  */
 });
