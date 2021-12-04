@@ -187,7 +187,7 @@ document.querySelector("#viewWorkBtn").addEventListener("click", (e) => {
   gsap.to(camera.position, {
     z: 10000,
     ease: "power3.inOut",
-    duration: 3,
+    duration: 1.5,
     onComplete: () => {
       window.location.assign("https://javipsanchez.netlify.app/");
     },
