@@ -30,7 +30,7 @@ void main() {
 
 ///////DEBUG/////
 
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 ///////CANVAS//////
 
@@ -99,7 +99,7 @@ for (let i = 0; i < 1000; ++i) {
 
 ///////////ORBIT//////////
 
-new OrbitControls(camera, canvas);
+// new OrbitControls(camera, canvas);
 
 ///////////RENDER//////////
 
@@ -157,20 +157,21 @@ render();
 gsap.to("#JaviPS", {
   opacity: 1,
   duration: 1.5,
+  delay: 1.5,
   y: 0,
   ease: "expo",
 });
 gsap.to("#Description", {
   opacity: 1,
   duration: 1.5,
-  delay: 0.3,
+  delay: 1.6,
   y: 0,
   ease: "expo",
 });
 gsap.to("#viewWorkBtn", {
   opacity: 1,
   duration: 1.5,
-  delay: 0.6,
+  delay: 1.7,
   y: 0,
   ease: "expo",
 });

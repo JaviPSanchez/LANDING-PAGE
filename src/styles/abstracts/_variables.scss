@@ -10,23 +10,23 @@ $rubik-sans: "Rubik", sans-serif;
 
 // - Font weights
 
-$Default-font-wheigt: 400;
-$Medium-font-wheigt: 500;
-$Semi-bold-font-wheigt: 600;
-$Bold-font-wheigt: 700;
+$default-font-weight: 400;
+$medium-font-weight: 500;
+$semi-bold-font-weight: 600;
+$bold-font-weight: 700;
 
 // - Line heights = font size * multiplier
 
-$Default-line-height: 1;
-$Small-line-height: 1.05;
-$Medium-line-height: 1.2;
-$Paragraph-default-line-height: 1.6;
+$default-line-height: 1;
+$small-line-height: 1.05;
+$medium-line-height: 1.2;
+$paragraph-default-line-height: 1.6;
 $large-line-height: 1.8;
 
 // - Letter spacing
 
-$Medium-letter-spacing: -0.5px;
-$Large-letter-spacing: 0.75px;
+$medium-letter-spacing: -0.5px;
+$large-letter-spacing: 0.75px;
 
 //  --- 02 COLORS
 
@@ -41,8 +41,8 @@ $shadow-light: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.1);
 
 // --- 06 BORDER RADIOUS
 
-$Default-border-radious: 0.9rem;
-$Medium-border-radious: 1.5rem;
+$default-border-radious: 0.9rem;
+$medium-border-radious: 1.5rem;
 
 // --- 07 WHITESPACE
 
@@ -61,11 +61,3 @@ $bp-smallest: 31.25em; // 500/16 = 31.25em
 //TRANSITION
 
 $transition: 0.5s cubic-bezier(0, 0, 0.58, 1);
-
-//BREAKPOINTS
-
-$bp-largest: 75em; // 1200px / 16 px = 75rem = 75em
-$bp-large: 68.75em; // 1100/16 = 68.5em
-$bp-medium: 56.25em; // 900/16 = 56.25em
-$bp-small: 37.5em; // 600/16 = 37.5em
-$bp-smallest: 31.25em; // 500/16 = 31.25em

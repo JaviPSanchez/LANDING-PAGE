@@ -1,0 +1,29 @@
+// rem and em do not follow the rule of 62.5%, 1 rem = 10px, they do not depend on html font-size in media queries! Instead 1rem (root font-size) = 1em (current font-size) = 16px
+
+// 1176 px
+@media (max-width: 73.5em) {
+  p {
+    font-size: 3.6rem;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+// 975 px
+@media (max-width: 73.5em) {
+  p {
+    font-size: 3rem;
+  }
+  h1 {
+    font-size: 1.6rem;
+  }
+}
+// 832 px
+@media (max-width: 52em) {
+  p {
+    font-size: 2.4rem;
+  }
+  h1 {
+    font-size: 1.6rem;
+  }
+}

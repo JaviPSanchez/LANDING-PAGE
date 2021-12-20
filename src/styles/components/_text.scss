@@ -1,11 +1,17 @@
+body {
+  position: relative;
+}
+
 .app {
   position: absolute;
-  top: 35%;
+  margin: 0 auto;
+  max-width: 150rem;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%); // --> X
-  text-align: center;
   padding: 1rem;
-  width: 100%;
+
+  text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.1rem;
   font-weight: 300;

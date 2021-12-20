@@ -6,19 +6,20 @@ body {
 }
 
 h1 {
-  font-weight: $Default-font-wheigt;
+  font-size: 2rem;
+  font-weight: $default-font-weight;
   color: $color-white;
-  margin-bottom: 20px;
-  opacity: 0;
+  margin-bottom: 2rem;
   transform: translateY(3rem);
+  opacity: 0;
   text-transform: uppercase;
   color: $color-black;
 }
 
 p {
   font-family: $rubik-sans;
-  font-weight: $Bold-font-wheigt;
-  font-size: 5.2rem;
+  font-weight: $bold-font-weight;
+  font-size: 4.4rem;
   margin-bottom: 3rem;
   opacity: 0;
   transform: translateY(3rem);
